@@ -1,0 +1,55 @@
+body {
+  background-color: chocolate;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.info {
+  position: absolute;
+  right: 10%;
+}
+
+.info div {
+  float: right;
+  margin: 10px;
+}
+
+#panel {
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: all 600ms;
+  top: 15%;
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+  left: 0;
+  right: 0;
+  border: 15px solid coral;
+}
+
+.squre {
+  float: left;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  display: block;
+  width: 100px;
+  height: 100px;
+  position: relative;
+  cursor: pointer;
+  border: 5px solid chocolate;
+  transition: all 600ms;
+}
+
+.squre div {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: brown;
+  backface-visibility: hidden;
+}
+
+.squre .back {
+  background: red;
+  transform: rotateX(180deg);
+}
