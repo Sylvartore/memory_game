@@ -62,13 +62,22 @@ onClick = event => {
   const parent = event.target.parentNode;
   if (!parent.id || parent.style.transform === "rotateX(180deg)") return;
   parent.style.transform = "rotateX(180deg)";
-  fetch("/click?id=" + parent.id).then(data => data.json()).then(info => {
-    document.getElementById("score").innerText = "Score: " + info.score;
-    document.getElementById("tiles").innerText = "Tiles: " + info.tiles;
-    document.getElementById("trial").innerText = "R: " + info.rows + " C: " + info.cols;
-    if (info.newGameRound) {
+  fetch("/click?id=" + parent.id).then(data => data.json()).then(data => {
+    document.getElementById("score").innerText = "Score: " + data.score;
+    document.getElementById("tiles").innerText = "Tiles: " + data.tiles;
+    document.getElementById("trial").innerText = "Trial: " + data.trial;
+    if (data.terminated) {
+      location.replace("/summary")
+    }
+    if (data.newGameRound) {
       expect_input = false;
       setTimeout(() => newGameRound(), 1500);
     }
   })
 };
+
+terminate = () => {
+  if (confirm("Are you sure to terminate the game?")) {
+    location.replace("/summary")
+  }
+}

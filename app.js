@@ -4,25 +4,17 @@ const bodyParser = require("body-parser");
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
-app.use(session({ secret: "Shh, its a secret!" }));
+app.use(session({ secret: "secret", resave: false, saveUninitialized: false }));
 
 app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
-// exphbs.registerHelper('times', function (n, block) {
-//     var accum = '';
-//     for (var i = 0; i < n; ++i)
-//         accum += block.fn(i);
-//     return accum;
-// });
-
 app.get("/", (req, res) => {
-    //if (req.session.game) {
-
-    // } else {
     req.session.game = {
         tiles: 3,
         score: 0,
@@ -33,15 +25,46 @@ app.get("/", (req, res) => {
         difficulty: 0,
         answers: []
     }
-    //}
 
     res.render('index', {
+        title: 'Memory Game',
+        scripts: [{ script: '/js/index.js' }],
+        styles: [{ style: '/css/index.css' }],
         helpers: {
             tiles: () => req.session.game.tiles,
             trial: () => req.session.game.trial,
             score: () => req.session.game.score
         }
     });
+});
+
+app.get("/summary", (req, res) => {
+    if (!req.session.game) {
+        res.redirect("/")
+    } else {
+        res.render('summary', {
+            scripts: [{ script: '/js/summary.js' }],
+            styles: [{ style: '/css/summary.css' }],
+            helpers: {
+                score: () => req.session.game.score
+            }
+        });
+    }
+});
+
+app.get("/leaderboard", (req, res) => {
+    if (!req.session.game) {
+        res.redirect("/")
+    } else {
+        res.render('leaderboard', {
+            scripts: [{ script: '/js/summary.js' }],
+            styles: [{ style: '/css/summary.css' }],
+            helpers: {
+                player_name: () => req.query.playername,
+                score: () => req.session.game.score
+            }
+        });
+    }
 });
 
 app.get("/info", (req, res) => {
@@ -55,6 +78,7 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/newRound", (req, res) => {
+    if (!req.session.game) return
     req.session.game.answers = [];
     const num_of_squres = req.session.game.rows * req.session.game.cols;
     for (let i = 0; i < req.session.game.tiles; i++) {
@@ -107,13 +131,15 @@ app.get("/click", (req, res) => {
         }
     }
     res.json({
+        terminated: req.session.game.score <= 0,
         newGameRound: newGameRound,
         tiles: req.session.game.tiles,
         score: req.session.game.score,
         trial: req.session.game.trial,
-        cols: req.session.game.cols,
-        rows: req.session.game.rows,
     })
 });
+
+
+
 
 app.listen(80, () => console.log("Server ready"));
