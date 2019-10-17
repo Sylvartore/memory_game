@@ -11,8 +11,12 @@ body {
   font-size: 30px;
 }
 
-#container {
+#summary {
   margin-top: 15%;
+}
+
+#leaderboard {
+  margin-top: 10%;
 }
 
 #playername {
@@ -33,4 +37,12 @@ button {
 #restart {
   color: white;
   background-color: dodgerblue;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 10px;
 }

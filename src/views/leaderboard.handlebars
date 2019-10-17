@@ -1,0 +1,24 @@
+<div id="leaderboard">
+    <div>Leader Board</div>
+    <div>Your Score : {{score}} Ranked : {{rank}}</div>
+    <div>
+        <div>Top 5 Player: </div>
+        <table>
+            <tr>
+                <td>Player Name</td>
+                <td>Score</td>
+            </tr>
+            {{#each top5}}
+            {{#if this}}
+            <tr>
+                <td>{{this.name}} </td>
+                <td>{{this.score}}</td>
+            </tr>
+            {{/if}}
+            {{/each}}
+        </table>
+    </div>
+    <div>
+        <button id="restart" onclick="restart()">Restart</button>
+    </div>
+</div>

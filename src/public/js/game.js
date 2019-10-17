@@ -1,7 +1,7 @@
 let expect_input = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  newGameRound();
+  // newGameRound();
 });
 
 renderPanel = async () => new Promise((res, rej) => {
@@ -38,11 +38,14 @@ newGameRound = () => {
   renderPanel().then(() => {
     fetch("/newRound").then(data => data.json()).then(answers => {
       for (i of answers) {
+        console.log(i)
         const squre = document.getElementById(i);
         setTimeout(() => {
+          new Audio("/sound/flip.mp3").play()
           squre.querySelector(".back").style.background = "dodgerblue";
           squre.style.transform = "rotateX(180deg)";
           setTimeout(() => {
+            new Audio("/sound/flip.mp3").play()
             squre.style.transform = "";
           }, 1000);
         }, 1000);
@@ -61,17 +64,38 @@ onClick = event => {
   if (!expect_input) return;
   const parent = event.target.parentNode;
   if (!parent.id || parent.style.transform === "rotateX(180deg)") return;
+  new Audio("/sound/flip.mp3").play()
   parent.style.transform = "rotateX(180deg)";
   fetch("/click?id=" + parent.id).then(data => data.json()).then(data => {
     document.getElementById("score").innerText = "Score: " + data.score;
     document.getElementById("tiles").innerText = "Tiles: " + data.tiles;
     document.getElementById("trial").innerText = "Trial: " + data.trial;
     if (data.terminated) {
-      location.replace("/summary")
+      new Audio("/sound/game_over.mp3").play()
+      expect_input = false;
+      setTimeout(() => {
+        location.replace("/summary")
+      }, 1500);
     }
     if (data.newGameRound) {
       expect_input = false;
-      setTimeout(() => newGameRound(), 1500);
+      if (data.error == 0) {
+        new Audio("/sound/wow.mp3").play()
+        newGameRound()
+      } else {
+        for (e of document.getElementsByClassName("squre")) {
+          if (e.querySelector(".back").style.background == "dodgerblue" &&
+            e.style.transform != "rotateX(180deg)") {
+            const squre = e;
+            setTimeout(() => {
+              console.log(squre)
+              new Audio("/sound/flip.mp3").play()
+              squre.style.transform = "rotateX(180deg)";
+            }, 1000);
+          }
+        }
+        setTimeout(() => newGameRound(), 3000);
+      }
     }
   })
 };
