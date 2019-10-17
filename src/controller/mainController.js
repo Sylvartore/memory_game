@@ -5,7 +5,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
     req.session.game = {
         tiles: 3,
-        score: 10,
+        score: 0,
         trial: 0,
         cols: 5,
         rows: 5,
