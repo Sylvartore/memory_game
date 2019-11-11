@@ -78,7 +78,7 @@ onClick = event => {
     }
     if (data.newGameRound) {
       expect_input = false;
-      if (data.error) {
+      if (data.error === 0) {
         new Audio("/sound/wow.mp3").play()
         setTimeout(() => newGameRound(), 3000);
       } else {

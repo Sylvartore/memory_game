@@ -5,6 +5,7 @@ const router = express.Router();
 router.get("/newRound", (req, res) => {
     if (!req.session.game) return
     req.session.game.answers = [];
+    req.session.game.error = 0;
     const num_of_squres = req.session.game.rows * req.session.game.cols;
     for (let i = 0; i < req.session.game.tiles; i++) {
         let random_index = Math.floor(Math.random() * num_of_squres);
@@ -40,7 +41,6 @@ router.get("/click", (req, res) => {
             }
             req.session.game.difficulty++;
         } else {
-            req.session.game.error = 0;
             if (req.session.game.difficulty != 0) {
                 switch (req.session.game.difficulty % 3) {
                     case 0:
@@ -58,7 +58,7 @@ router.get("/click", (req, res) => {
     }
     res.json({
         terminated: req.session.game.score <= 0,
-        error: req.session.game.error == 0,
+        error: req.session.game.error,
         newGameRound: newGameRound,
         tiles: req.session.game.tiles,
         score: req.session.game.score,
