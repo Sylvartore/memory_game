@@ -38,7 +38,6 @@ newGameRound = () => {
   renderPanel().then(() => {
     fetch("/newRound").then(data => data.json()).then(answers => {
       for (i of answers) {
-        console.log(i)
         const squre = document.getElementById(i);
         setTimeout(() => {
           new Audio("/sound/flip.mp3").play()
@@ -79,7 +78,7 @@ onClick = event => {
     }
     if (data.newGameRound) {
       expect_input = false;
-      if (data.error == 0) {
+      if (data.error) {
         new Audio("/sound/wow.mp3").play()
         newGameRound()
       } else {
@@ -88,7 +87,6 @@ onClick = event => {
             e.style.transform != "rotateX(180deg)") {
             const squre = e;
             setTimeout(() => {
-              console.log(squre)
               new Audio("/sound/flip.mp3").play()
               squre.style.transform = "rotateX(180deg)";
             }, 1000);
