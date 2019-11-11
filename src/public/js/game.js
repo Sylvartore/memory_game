@@ -80,7 +80,7 @@ onClick = event => {
       expect_input = false;
       if (data.error) {
         new Audio("/sound/wow.mp3").play()
-        newGameRound()
+        setTimeout(() => newGameRound(), 3000);
       } else {
         for (e of document.getElementsByClassName("squre")) {
           if (e.querySelector(".back").style.background == "dodgerblue" &&
