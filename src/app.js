@@ -19,4 +19,4 @@ app.set('view engine', 'handlebars');
 app.use('/', mainController.router);
 app.use('/', gameController.router);
 
-db.init().then(app.listen(80, console.log("Server ready")))
+db.init().then(app.listen(80, console.log("Server ready...")))
